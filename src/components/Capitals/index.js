@@ -34,9 +34,18 @@ class Capitals extends Component {
     activeCountryId: countryAndCapitalsList[0].id,
   }
 
+  onChangingCapital = event => {
+    const selectedCapital = event.target.value
+    const selectedObj = countryAndCapitalsList.find(
+      eachObj => eachObj.capitalDisplayText === selectedCapital,
+    )
+
+    this.setState({activeCountryId: selectedObj.id})
+  }
+
   render() {
     const {activeCountryId} = this.state
-    const activeCountryObj = countryAndCapitalsList.filter(
+    const activeCountryObj = countryAndCapitalsList.find(
       eachObj => eachObj.id === activeCountryId,
     )
     console.log(activeCountryObj)
@@ -47,8 +56,18 @@ class Capitals extends Component {
         <div className="main-card">
           <h1 className="heading">Countries and Capitals</h1>
           <form>
-            <select name="countries" id="countries" className="dropdown">
-              <option>{capitalDisplayText}</option>
+            <select
+              name="countries"
+              id="countries"
+              className="dropdown"
+              onChange={this.onChangingCapital}
+            >
+              {/* <option value={activeCountryId} selected>
+                {capitalDisplayText}
+              </option> */}
+              {countryAndCapitalsList.map(eachObj => (
+                <Option optionDetails={eachObj} key={eachObj.id} />
+              ))}
             </select>
             <label className="question-text" htmlFor="countries">
               is capital of which country?
@@ -59,6 +78,13 @@ class Capitals extends Component {
       </div>
     )
   }
+}
+
+const Option = props => {
+  const optionDetails = props
+  const {id, capitalDisplayText} = optionDetails
+
+  return <option value={id}>{capitalDisplayText}</option>
 }
 
 export default Capitals
